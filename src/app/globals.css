@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/* FixSure design tokens — see BRAND_GUIDELINES.md */
+:root {
+  --navy-950: #061a47;
+  --navy-900: #0b2a6f;
+  --navy-800: #123585;
+  --navy-700: #1b45a3;
+  --navy-100: #e4eaf7;
+  --navy-50: #f3f6fc;
+  --gold-600: #a87820;
+  --gold-500: #c8962e;
+  --gold-400: #e0b050;
+  --gold-100: #faf0d6;
+  --ink: #101828;
+  --muted: #475467;
+  --line: #e2e6ee;
+  --surface: #ffffff;
+  --canvas: #f7f8fb;
+  --success: #067647;
+  --warning: #a15c07;
+  --danger: #b42318;
+  --focus: #1b45a3;
+}
+
+@theme inline {
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-navy-100: var(--navy-100);
+  --color-navy-50: var(--navy-50);
+  --color-gold-600: var(--gold-600);
+  --color-gold-500: var(--gold-500);
+  --color-gold-400: var(--gold-400);
+  --color-gold-100: var(--gold-100);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-surface: var(--surface);
+  --color-canvas: var(--canvas);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-manrope), "Segoe UI", system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #eceff5 25%, #f6f8fb 37%, #eceff5 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+@keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
