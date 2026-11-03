@@ -7,7 +7,6 @@ import { DeviceArt, ShieldBadge, Telephone } from "@/components/repair/art";
 import { formatINR } from "@/lib/money";
 import type { RepairServiceItem } from "@/lib/repair/catalog";
 import { site, telLink, whatsappLink } from "@/lib/site";
-import { Emblem, Wordmark } from "@/components/ui/logo";
 import { repairContent as C } from "@/lib/repair/content";
 import Image from "next/image";
 
@@ -44,12 +43,11 @@ export function LandingHero() {
           {C.hero.image ? (
             <div className="glass relative aspect-[4/5] overflow-hidden rounded-3xl"><Image src={C.hero.image} alt={C.hero.imageAlt} fill priority sizes="(min-width:1024px) 40vw, 100vw" className="object-cover" /></div>
           ) : (
-            <div className="relative flex aspect-square items-center justify-center">
-              <div aria-hidden="true" className="absolute inset-8 rounded-full bg-gradient-to-br from-blue-500/40 to-gold-400/25 blur-3xl" />
-              <Emblem className="relative h-4/5 w-4/5 drop-shadow-[0_0_40px_rgba(30,107,255,0.55)]" />
+            <div className="relative flex items-center justify-center py-6">
+              <div aria-hidden="true" className="absolute inset-10 rounded-full bg-gradient-to-br from-blue-500/40 to-gold-400/25 blur-3xl" />
+              <Image src={site.logo.fullSrc} alt="FixSure — Trust, Repair, Solve" width={1000} height={673} priority sizes="(min-width:1024px) 440px, 90vw" className="relative w-full drop-shadow-[0_0_30px_rgba(30,107,255,0.35)]" />
             </div>
           )}
-          <figcaption className="mt-2 text-center"><Wordmark size="lg" className="items-center" /></figcaption>
         </figure>
       </div>
     </section>

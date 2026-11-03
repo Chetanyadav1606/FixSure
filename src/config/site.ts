@@ -17,7 +17,7 @@ export const site = {
   /** Default WhatsApp booking message. */
   whatsappBookingText: "Hi FixSure, I want to book a doorstep mobile repair",
   /** Swappable logo. Set iconSrc to a transparent PNG/SVG (e.g. "/images/logo-icon.png") to replace the drawn shield. */
-  logo: { iconSrc: null as string | null, iconAlt: "FixSure shield" },
+  logo: { iconSrc: "/images/logo-icon.png" as string | null, fullSrc: "/images/logo-full.png", iconAlt: "FixSure shield" },
   serviceAreas: ["Mumbai", "Navi Mumbai", "Thane"],
   /** Warranty months on repairs. null until the owner sets real terms; UI then says terms are on the quotation. */
   repairWarrantyMonths: null as number | null,
