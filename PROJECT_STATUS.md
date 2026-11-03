@@ -1,5 +1,5 @@
 # FixSure — Project Status
-_Last updated: 2026-11-02_
+_Last updated: 2026-11-03_
 
 ## Current phase
 Phases 1–4 done (brand, frontend foundation, storefront, Smart Finder) on a **sample-data repository**. Phase 5 partially done: SQL schema, RLS and stock functions are written but **not yet applied to any Supabase project and not yet wired into the app**. Phases 6–12 not started.
@@ -11,6 +11,9 @@ Phases 1–4 done (brand, frontend foundation, storefront, Smart Finder) on a **
 - `supabase/migrations/0001_schema.sql`, `0002_rls_storage.sql` — full schema from the spec, RLS, role-escalation guard, `reserve_stock/commit_stock/release_stock`, invoice numbering, storage buckets.
 
 ## Decisions
+- **Hosting is Netlify** (changed from Vercel per latest brief). `netlify.toml` added; Next 16 on Netlify's adapter is unverified until a real deploy.
+- Roles are the `app_role` enum on `profiles` (not a separate `roles` table).
+- Palette stays as derived from the supplied logos (navy `#0B2A6F`, gold `#C8962E`); brief's `#1677E8` electric blue is not yet used and can be added as an accent.
 - `cacheComponents`/`partialPrefetching` turned **off** (forces Suspense around all dynamic data; too much friction). Standard dynamic rendering used.
 - Brand: shield + check emblem, navy/gold (see BRAND_GUIDELINES.md).
 - Money = integer paise in code, `numeric(12,2)` in DB. Tax rate lives per product (nullable = cannot be sold); nothing hardcoded.
@@ -25,7 +28,7 @@ Brand SVG set + guidelines · design tokens · header/footer/layout · homepage 
 Auth, accounts, cart, checkout, Razorpay, orders, invoices/PDF, shipping/Shiprocket, repair booking & tracking forms, B2B portal, admin Control Center, CSV import/export, email/WhatsApp notifications, reviews, wishlist, comparison, recently viewed, real product photos, Playwright E2E tests, rate limiting, `supabase/seed.sql`, deployment docs, accessibility audit, Lighthouse run.
 
 ## Migration status
-Written, **never executed** (no Supabase project available in this session). Expect small fixes on first `supabase db push`.
+Now **executed and tested on PGlite** (WASM Postgres with stubbed `auth`/`storage` schemas): `src/db/__tests__/migrations.test.ts` — all spec tables exist, RLS isolation, role-escalation block, wholesale-price protection, oversell prevention, webhook de-dup constraint. Still **not applied to a real Supabase project**; Supabase-specific behaviour (real auth.uid(), storage, grants) remains unverified.
 
 ## Environment
 Node 24, npm 11. See `.env.example`. Nothing external is configured.
@@ -36,7 +39,7 @@ Node 24, npm 11. See `.env.example`. Nothing external is configured.
 - The `playwright` Chromium is installed; no E2E specs written yet.
 
 ## Tests (last run 2026-11-02)
-`npx vitest run` 23/23 pass · `tsc --noEmit` clean · `eslint src` clean · `next build` succeeds (20 routes). Visual check of home/finder at desktop width only; mobile not yet reviewed.
+`npx vitest run` 42/42 pass (23 logic + 19 DB) · `tsc --noEmit` clean · `eslint src` clean · `next build` succeeds (20 routes). Visual check of home/finder at desktop width only; mobile not yet reviewed.
 
 ## Next steps (in order)
 1. Create Supabase project, apply migrations, write `seed.sql`, implement `SupabaseCatalogRepository`.
