@@ -82,10 +82,10 @@ export default async function ProductPage({ params }: { params: Params }) {
 
         <div>
           <p className="text-sm font-semibold uppercase tracking-wide text-muted">{brand?.name} · {CONDITION_LABEL[product.condition]}</p>
-          <h1 className="mt-2 text-3xl font-extrabold leading-tight text-navy-900">{product.name}</h1>
+          <h1 className="mt-2 text-3xl font-extrabold leading-tight text-ink">{product.name}</h1>
           <p className="mt-2 text-sm text-muted">SKU {product.sku}{product.oemNumbers.length > 0 && <> · OEM {product.oemNumbers.join(", ")}</>}</p>
 
-          <p className="mt-5 text-3xl font-extrabold text-navy-900">
+          <p className="mt-5 text-3xl font-extrabold text-ink">
             {formatINR(product.pricePaise)}
             {hasDiscount && <span className="ml-3 text-base font-medium text-muted line-through">{formatINR(product.mrpPaise!)}</span>}
           </p>
@@ -94,7 +94,7 @@ export default async function ProductPage({ params }: { params: Params }) {
 
           <p className="mt-5 leading-7 text-ink/90">{product.description}</p>
 
-          <div className="mt-6 rounded-xl border border-line bg-white p-5">
+          <div className="mt-6 rounded-xl border border-line bg-surface p-5">
             <h2 className="font-bold">{site.features.onlineCheckout ? "Order" : "Order by WhatsApp or phone"}</h2>
             <p className="mt-1 text-sm text-muted">
               Online checkout is not open yet. Message or call us with the SKU and we will confirm availability and arrange payment and delivery.
@@ -106,9 +106,9 @@ export default async function ProductPage({ params }: { params: Params }) {
           </div>
 
           <ul className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
-            <li className="flex items-start gap-2"><ShieldCheck className="mt-0.5 h-4 w-4 text-navy-800" aria-hidden="true" />
+            <li className="flex items-start gap-2"><ShieldCheck className="mt-0.5 h-4 w-4 text-ink" aria-hidden="true" />
               {product.warrantyMonths ? `${product.warrantyMonths}-month warranty (terms apply)` : "Warranty: see warranty policy"}</li>
-            <li className="flex items-start gap-2"><Truck className="mt-0.5 h-4 w-4 text-navy-800" aria-hidden="true" />
+            <li className="flex items-start gap-2"><Truck className="mt-0.5 h-4 w-4 text-ink" aria-hidden="true" />
               <Link href="/policies/shipping" className="underline">Shipping information</Link> · <Link href="/policies/returns" className="underline">Returns</Link></li>
           </ul>
         </div>
@@ -116,9 +116,9 @@ export default async function ProductPage({ params }: { params: Params }) {
 
       <div className="mt-14 grid gap-10 lg:grid-cols-2">
         <section aria-labelledby="spec-h">
-          <h2 id="spec-h" className="text-xl font-extrabold text-navy-900">Specifications</h2>
+          <h2 id="spec-h" className="text-xl font-extrabold text-ink">Specifications</h2>
           {product.specs.length ? (
-            <dl className="mt-4 divide-y divide-line rounded-xl border border-line bg-white">
+            <dl className="mt-4 divide-y divide-line rounded-xl border border-line bg-surface">
               {product.specs.map((s) => (
                 <div key={s.key} className="grid grid-cols-2 gap-4 px-4 py-3 text-sm"><dt className="font-semibold text-muted">{s.key}</dt><dd>{s.value}</dd></div>
               ))}
@@ -127,10 +127,10 @@ export default async function ProductPage({ params }: { params: Params }) {
         </section>
 
         <section aria-labelledby="compat-h">
-          <h2 id="compat-h" className="text-xl font-extrabold text-navy-900">Compatibility</h2>
+          <h2 id="compat-h" className="text-xl font-extrabold text-ink">Compatibility</h2>
           <p className="mt-1 text-sm text-muted">Only devices we have on record are listed. If yours is not here, it is <strong>not verified</strong> — check the part number or ask us first.</p>
           {compat.length ? (
-            <ul className="mt-4 divide-y divide-line rounded-xl border border-line bg-white">
+            <ul className="mt-4 divide-y divide-line rounded-xl border border-line bg-surface">
               {compat.map((c) => (
                 <li key={c.model.id} className="flex flex-wrap items-start justify-between gap-2 px-4 py-3 text-sm">
                   <div>
@@ -142,14 +142,14 @@ export default async function ProductPage({ params }: { params: Params }) {
               ))}
             </ul>
           ) : (
-            <p className="mt-4 rounded-xl border border-dashed border-line bg-white p-5 text-sm text-muted">No compatibility records yet. <Link href="/finder" className="font-semibold text-navy-700 underline">Ask us to identify your part</Link>.</p>
+            <p className="mt-4 rounded-xl border border-dashed border-line bg-surface p-5 text-sm text-muted">No compatibility records yet. <Link href="/finder" className="font-semibold text-blue-400 underline">Ask us to identify your part</Link>.</p>
           )}
         </section>
       </div>
 
       {related.length > 0 && (
         <section className="mt-14" aria-labelledby="rel-h">
-          <h2 id="rel-h" className="text-xl font-extrabold text-navy-900">Related products</h2>
+          <h2 id="rel-h" className="text-xl font-extrabold text-ink">Related products</h2>
           <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {related.map((p) => <ProductCard key={p.id} product={p} category={catById.get(p.categoryId)} brand={brandById.get(p.brandId)} />)}
           </div>

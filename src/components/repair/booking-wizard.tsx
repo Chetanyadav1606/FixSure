@@ -24,22 +24,25 @@ type Place = "home" | "office";
 const STEPS = ["Device", "Problem", "Service", "Location", "Time", "Review", "Done"] as const;
 const OTHER = "__other__";
 
-const input = "h-12 w-full rounded-lg border border-line bg-white px-3 text-base outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 aria-[invalid=true]:border-danger";
+const input = "h-12 w-full rounded-lg border border-line bg-surface px-3 text-base outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 aria-[invalid=true]:border-danger";
 const label = "mb-1.5 block text-sm font-semibold";
 
 const fmtSlot = (iso: string) =>
   new Intl.DateTimeFormat("en-IN", { weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit", timeZone: "Asia/Kolkata" }).format(new Date(iso));
 
-export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; initialServiceSlug?: string }) {
-  const startService = data.services.find((s) => s.slug === initialServiceSlug);
-  const [step, setStep] = useState(0);
-  const [brand, setBrand] = useState("");
-  const [customBrand, setCustomBrand] = useState("");
-  const [model, setModel] = useState("");
-  const [customModel, setCustomModel] = useState("");
+export type WizardPreset = { brand: string; model: string; serviceSlug?: string; describeOwn?: boolean; customBrand?: string; customModel?: string };
+
+export function BookingWizard({ data, initialServiceSlug, preset, backHref }: { data: WizardData; initialServiceSlug?: string; preset?: WizardPreset; backHref?: string }) {
+  const startService = data.services.find((s) => s.slug === (preset?.serviceSlug ?? initialServiceSlug));
+  const minStep = preset ? 2 : 0; // with a preset, device + problem were chosen on the previous pages
+  const [step, setStep] = useState(minStep);
+  const [brand, setBrand] = useState(preset?.brand ?? "");
+  const [customBrand, setCustomBrand] = useState(preset?.customBrand ?? "");
+  const [model, setModel] = useState(preset?.model ?? "");
+  const [customModel, setCustomModel] = useState(preset?.customModel ?? "");
   const [modelQuery, setModelQuery] = useState("");
   const [serviceId, setServiceId] = useState(startService?.id ?? "");
-  const [describeOwn, setDescribeOwn] = useState(false);
+  const [describeOwn, setDescribeOwn] = useState(preset?.describeOwn ?? false);
   const [issueText, setIssueText] = useState("");
   const [details, setDetails] = useState("");
   const [photos, setPhotos] = useState<{ path: string; name: string }[]>([]);
@@ -103,6 +106,7 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
       if (!describeOwn && !service) e.issue = "Choose a repair, or describe the problem yourself";
       if (describeOwn && issueText.trim().length < 3) e.issue = "Tell us what is wrong";
     }
+    if (s === 2 && describeOwn && issueText.trim().length < 3) e.issue = "Tell us what is wrong";
     if (s === 2 && !fulfil) e.fulfil = "Choose how you’d like the repair done";
     if (s === 3) {
       if (needsAddress) {
@@ -121,7 +125,7 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
   };
 
   const next = () => { if (validate(step)) { setFormError(""); setStep((x) => x + 1); } };
-  const back = () => { setErrors({}); setFormError(""); setStep((x) => Math.max(0, x - 1)); };
+  const back = () => { setErrors({}); setFormError(""); setStep((x) => Math.max(minStep, x - 1)); };
 
   const verifyPin = (v: string) => {
     setPin(null);
@@ -169,16 +173,16 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
   }
 
   const card = (selected: boolean, disabled = false) => cn(
-    "relative flex w-full cursor-pointer items-start gap-3 rounded-xl border bg-white p-4 text-left transition",
+    "relative flex w-full cursor-pointer items-start gap-3 rounded-xl border bg-surface p-4 text-left transition",
     selected ? "border-blue-500 ring-2 ring-blue-500/30" : "border-line hover:border-navy-700/40",
     disabled && "cursor-not-allowed opacity-50 hover:border-line");
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="rounded-2xl border border-line bg-white shadow-sm">
+      <div className="rounded-2xl border border-line bg-surface shadow-sm">
         <ol className="flex items-center gap-1 overflow-x-auto border-b border-line px-4 py-3 text-xs font-semibold" aria-label="Booking progress">
-          {STEPS.map((s, i) => (
-            <li key={s} aria-current={i === step ? "step" : undefined} className={cn("flex shrink-0 items-center gap-1.5", i === step ? "text-navy-900" : i < step ? "text-success" : "text-muted")}>
+          {STEPS.map((s, i) => i < minStep ? null : (
+            <li key={s} aria-current={i === step ? "step" : undefined} className={cn("flex shrink-0 items-center gap-1.5", i === step ? "text-ink" : i < step ? "text-success" : "text-muted")}>
               <span className={cn("flex h-6 w-6 items-center justify-center rounded-full text-[11px]", i === step ? "bg-navy-900 text-white" : i < step ? "bg-success text-white" : "bg-canvas")}>
                 {i < step ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : i + 1}
               </span>
@@ -197,7 +201,7 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
 
           <AnimatePresence mode="wait">
             <motion.div key={step} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.22 }}>
-              <h3 ref={heading} tabIndex={-1} className="text-2xl font-extrabold text-navy-900 outline-none">
+              <h3 ref={heading} tabIndex={-1} className="text-2xl font-extrabold text-ink outline-none">
                 {["What needs fixing today?", "What’s the problem?", "How should we do it?", "Where and who?", "Choose a time", "Review your booking", "Booking received"][step]}
               </h3>
 
@@ -257,9 +261,9 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
                   <div className="grid gap-3 sm:grid-cols-2" role="group" aria-label="Repair type">
                     {data.services.map((s) => (
                       <button key={s.id} type="button" onClick={() => { setServiceId(s.id); setDescribeOwn(false); }} aria-pressed={!describeOwn && serviceId === s.id} className={card(!describeOwn && serviceId === s.id)}>
-                        <ServiceIcon name={s.iconKey} className="mt-0.5 h-6 w-6 shrink-0 text-navy-800" />
+                        <ServiceIcon name={s.iconKey} className="mt-0.5 h-6 w-6 shrink-0 text-ink" />
                         <span><span className="block font-bold">{s.name}</span><span className="block text-sm text-muted">{s.description}</span>
-                          {s.startingPricePaise != null && <span className="mt-1 block text-xs font-semibold text-navy-800">From {formatINR(s.startingPricePaise)} · estimate</span>}</span>
+                          {s.startingPricePaise != null && <span className="mt-1 block text-xs font-semibold text-ink">From {formatINR(s.startingPricePaise)} · estimate</span>}</span>
                       </button>
                     ))}
                     <button type="button" onClick={() => { setDescribeOwn(true); setServiceId(""); }} aria-pressed={describeOwn} className={card(describeOwn)}>
@@ -280,12 +284,12 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
                       <p className={label}>Photos <span className="font-normal text-muted">(optional, up to 3 · JPG, PNG or WebP · 5 MB each)</span></p>
                       <ul className="mb-2 flex flex-wrap gap-2">
                         {photos.map((p) => (
-                          <li key={p.path} className="flex items-center gap-2 rounded-full bg-navy-50 py-1 pl-3 pr-1 text-sm">{p.name}
-                            <button type="button" aria-label={`Remove ${p.name}`} onClick={() => setPhotos((x) => x.filter((y) => y.path !== p.path))} className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-white"><X className="h-4 w-4" aria-hidden="true" /></button></li>
+                          <li key={p.path} className="flex items-center gap-2 rounded-full bg-surface-2 py-1 pl-3 pr-1 text-sm">{p.name}
+                            <button type="button" aria-label={`Remove ${p.name}`} onClick={() => setPhotos((x) => x.filter((y) => y.path !== p.path))} className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-surface"><X className="h-4 w-4" aria-hidden="true" /></button></li>
                         ))}
                       </ul>
                       {photos.length < 3 && (
-                        <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-lg border border-dashed border-navy-900/40 px-4 text-sm font-semibold text-navy-900 hover:bg-navy-50">
+                        <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-lg border border-dashed border-line px-4 text-sm font-semibold text-ink hover:bg-surface-2">
                           {uploading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <ImagePlus className="h-4 w-4" aria-hidden="true" />} Add photo
                           <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="sr-only" disabled={uploading} onChange={(e) => { onPhotos(e.target.files); e.target.value = ""; }} />
                         </label>
@@ -299,14 +303,24 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
               {/* 3 — service type */}
               {step === 2 && (
                 <div className="mt-5">
+                  {preset && (
+                    <div className="mb-6 space-y-4">
+                      <p className="rounded-lg bg-surface-2 p-3 text-sm"><strong>{brandName} {modelName}</strong> · {describeOwn ? "Describe the problem" : service?.name}</p>
+                      {describeOwn && (
+                        <div><label className={label} htmlFor="w-issue-p">What is wrong?</label><input id="w-issue-p" className={input} value={issueText} onChange={(e) => setIssueText(e.target.value)} maxLength={120} aria-invalid={!!errors.issue} />
+                          {errors.issue && <p role="alert" className="mt-1 text-sm text-danger">{errors.issue}</p>}</div>
+                      )}
+                      <div><label className={label} htmlFor="w-details-p">Anything else we should know? <span className="font-normal text-muted">(optional)</span></label><textarea id="w-details-p" className={cn(input, "h-20 py-2")} value={details} onChange={(e) => setDetails(e.target.value)} maxLength={1000} /></div>
+                    </div>
+                  )}
                   <div className="grid gap-3 sm:grid-cols-2" role="group" aria-label="Service type">
                     {options.map((o) => {
                       const sel = fulfil === o.fulfil && (o.fulfil !== "doorstep" || place === o.place);
                       return (
                         <button key={o.key} type="button" disabled={!o.available} aria-pressed={sel} onClick={() => { setFulfil(o.fulfil); if (o.place) setPlace(o.place); setSlotId(""); }} className={card(sel, !o.available)}>
-                          <o.Icon className="mt-0.5 h-6 w-6 shrink-0 text-navy-800" strokeWidth={1.5} aria-hidden="true" />
+                          <o.Icon className="mt-0.5 h-6 w-6 shrink-0 text-ink" strokeWidth={1.5} aria-hidden="true" />
                           <span><span className="block font-bold">{o.title}</span><span className="block text-sm text-muted">{o.blurb}</span>
-                            <span className="mt-1 block text-xs font-semibold text-navy-800">{o.available ? o.note : "Not available"}{!o.available && ` — ${o.note}`}</span></span>
+                            <span className="mt-1 block text-xs font-semibold text-ink">{o.available ? o.note : "Not available"}{!o.available && ` — ${o.note}`}</span></span>
                         </button>
                       );
                     })}
@@ -333,7 +347,7 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
                     </>
                   )}
                   {fulfil === "store_dropoff" && data.centres[0] && (
-                    <p className="flex items-start gap-2 rounded-lg bg-navy-50 p-3 text-sm sm:col-span-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />{data.centres[0].name}, {data.centres[0].address}, {data.centres[0].city}</p>
+                    <p className="flex items-start gap-2 rounded-lg bg-surface-2 p-3 text-sm sm:col-span-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />{data.centres[0].name}, {data.centres[0].address}, {data.centres[0].city}</p>
                   )}
                   <div><label className={label} htmlFor="w-name">Your name</label><input id="w-name" autoComplete="name" className={input} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} aria-invalid={!!errors.name} />{errors.name && <p className="mt-1 text-sm text-danger" role="alert">{errors.name}</p>}</div>
                   <div><label className={label} htmlFor="w-phone">Mobile number</label><input id="w-phone" type="tel" inputMode="tel" autoComplete="tel" className={input} value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={16} aria-invalid={!!errors.phone} />{errors.phone && <p className="mt-1 text-sm text-danger" role="alert">{errors.phone}</p>}</div>
@@ -397,7 +411,7 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
                     <motion.path d="M15 27l8 8 15-17" fill="none" stroke="#067647" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: 0.15 }} />
                   </svg>
                   <p className="mt-4 text-sm text-muted">Your repair ticket</p>
-                  <p className="text-3xl font-extrabold tracking-wide text-navy-900" data-testid="ticket-number">{result.ticketNumber}</p>
+                  <p className="text-3xl font-extrabold tracking-wide text-ink" data-testid="ticket-number">{result.ticketNumber}</p>
                   <p className="mt-3 text-sm">Tracking key (keep it private): <code className="rounded bg-canvas px-2 py-1 font-mono text-xs">{result.trackingToken}</code></p>
                   <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-muted">Save your ticket number. You can track with it plus the phone number you gave us. Our team will contact you to confirm the booking — it is not scheduled until we do.</p>
                   <Link href={`/repair/track?ticket=${encodeURIComponent(result.ticketNumber)}`} className="mt-6 inline-flex h-12 items-center gap-2 rounded-lg bg-navy-900 px-6 font-semibold text-white hover:bg-navy-800">Track this repair <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
@@ -408,7 +422,9 @@ export function BookingWizard({ data, initialServiceSlug }: { data: WizardData; 
 
           {step < 6 && (
             <div className="mt-8 flex items-center justify-between gap-3 border-t border-line pt-5">
-              <button type="button" onClick={back} disabled={step === 0} className="inline-flex h-12 cursor-pointer items-center gap-2 rounded-lg px-4 font-semibold text-navy-900 hover:bg-navy-50 disabled:invisible"><ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back</button>
+              {step === minStep && backHref
+                ? <a href={backHref} className="inline-flex h-12 items-center gap-2 rounded-lg px-4 font-semibold text-ink hover:bg-surface-2"><ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back</a>
+                : <button type="button" onClick={back} disabled={step === 0} className="inline-flex h-12 cursor-pointer items-center gap-2 rounded-lg px-4 font-semibold text-ink hover:bg-surface-2 disabled:invisible"><ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back</button>}
               {step < 5 && <button type="button" onClick={next} className="inline-flex h-12 cursor-pointer items-center gap-2 rounded-lg bg-navy-900 px-6 font-semibold text-white hover:bg-navy-800">{step === 4 && !slotId ? "Continue without a time" : "Next"} <ArrowRight className="h-4 w-4" aria-hidden="true" /></button>}
               {step === 5 && data.configured && (
                 <button type="button" onClick={submit} disabled={pending} className="inline-flex h-12 cursor-pointer items-center gap-2 rounded-lg bg-gold-500 px-6 font-bold text-navy-950 hover:bg-gold-400 disabled:opacity-60">

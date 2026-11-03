@@ -9,7 +9,9 @@ import { site, whatsappLink } from "@/lib/site";
 
 export function RepairHero() {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-950 text-white">
+    <section className="relative isolate overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-[#3b1d8f] text-white">
+      <div aria-hidden="true" className="absolute -bottom-24 -left-24 -z-10 h-96 w-96 rounded-full bg-pink-500/25 blur-3xl" />
+      <div aria-hidden="true" className="absolute right-1/3 top-10 -z-10 h-72 w-72 rounded-full bg-emerald-400/15 blur-3xl" />
       <div aria-hidden="true" className="grid-fade absolute inset-0 -z-10" />
       <div aria-hidden="true" className="absolute -right-32 -top-32 -z-10 h-[34rem] w-[34rem] rounded-full bg-blue-500/25 blur-3xl" />
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-14 md:pb-24 md:pt-20 lg:grid-cols-[1.2fr_1fr]">
@@ -49,6 +51,8 @@ export function RepairHero() {
   );
 }
 
+const TILE = ["bg-sky-100 text-sky-700", "bg-emerald-100 text-emerald-700", "bg-orange-100 text-orange-700", "bg-pink-100 text-pink-700", "bg-violet-100 text-violet-700", "bg-amber-100 text-amber-700"];
+
 export function ServiceGrid({ services, configured }: { services: RepairServiceItem[]; configured: boolean }) {
   const groups = [
     { key: "common", title: "Common repairs", blurb: "The fixes we’re asked for most." },
@@ -56,9 +60,9 @@ export function ServiceGrid({ services, configured }: { services: RepairServiceI
   ] as const;
   return (
     <section id="services" className="mx-auto max-w-7xl scroll-mt-44 md:scroll-mt-32 px-4 pt-20" aria-labelledby="svc-h">
-      <h2 id="svc-h" className="max-w-2xl text-3xl font-extrabold tracking-tight text-navy-900 md:text-4xl">Every repair, explained before it starts.</h2>
+      <h2 id="svc-h" className="max-w-2xl text-2xl font-bold tracking-tight text-ink md:text-[32px]">Every repair, explained before it starts.</h2>
       <p className="mt-3 max-w-2xl text-muted">Prices and durations appear only where we’ve set them. Everything else is quoted after diagnosis.</p>
-      {services.length === 0 && <p className="mt-8 rounded-xl border border-dashed border-line bg-white p-8 text-center text-sm text-muted">Repair services will appear here once they’re published.</p>}
+      {services.length === 0 && <p className="mt-8 rounded-xl border border-dashed border-line bg-surface p-8 text-center text-sm text-muted">Repair services will appear here once they’re published.</p>}
       {groups.map((g) => {
         const list = services.filter((s) => s.category === g.key);
         if (!list.length) return null;
@@ -67,19 +71,19 @@ export function ServiceGrid({ services, configured }: { services: RepairServiceI
             <div className="flex items-baseline gap-3"><h3 className="text-lg font-extrabold">{g.title}</h3><p className="text-sm text-muted">{g.blurb}</p></div>
             <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {list.map((s, i) => (
-                <li key={s.id} className={`group relative overflow-hidden rounded-xl border bg-white p-5 transition hover:-translate-y-1 hover:shadow-xl ${g.key === "advanced" ? "border-navy-900/20" : "border-line"} ${i === 0 && g.key === "common" ? "lg:col-span-1" : ""}`}>
+                <li key={s.id} className={`group relative overflow-hidden rounded-xl border bg-surface p-5 transition hover:-translate-y-1 hover:shadow-xl ${g.key === "advanced" ? "border-line" : "border-line"} ${i === 0 && g.key === "common" ? "lg:col-span-1" : ""}`}>
                   <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-blue-500 to-gold-500 transition-transform duration-300 group-hover:scale-x-100" />
                   <div className="flex items-start justify-between">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy-50 text-navy-900 transition group-hover:bg-navy-900 group-hover:text-white"><ServiceIcon name={s.iconKey} className="h-6 w-6" /></span>
+                    <span className={`flex h-12 w-12 items-center justify-center rounded-xl transition group-hover:scale-110 ${TILE[(s.iconKey.length + i) % TILE.length]}`}><ServiceIcon name={s.iconKey} className="h-6 w-6" /></span>
                     {g.key === "advanced" && <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-gold-600">Advanced</span>}
                   </div>
-                  <h4 className="mt-4 text-lg font-extrabold text-navy-900">{s.name}</h4>
+                  <h4 className="mt-4 text-lg font-extrabold text-ink">{s.name}</h4>
                   <p className="mt-1 text-sm leading-6 text-muted">{s.description}</p>
                   <p className="mt-4 text-sm font-semibold text-ink">
                     {s.startingPricePaise != null ? <>From {formatINR(s.startingPricePaise)} <span className="font-normal text-muted">· estimate</span></> : <span className="text-muted">Quote after diagnosis</span>}
                     {s.durationText && <span className="font-normal text-muted"> · {s.durationText}</span>}
                   </p>
-                  <Link href={`/repair?service=${s.slug}#book`} className="mt-4 inline-flex h-11 items-center gap-1.5 text-sm font-bold text-navy-700 after:absolute after:inset-0 hover:text-navy-900">
+                  <Link href={`/repair?service=${s.slug}#book`} className="mt-4 inline-flex h-11 items-center gap-1.5 text-sm font-bold text-blue-400 after:absolute after:inset-0 hover:text-ink">
                     Book this service <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
                   </Link>
                 </li>
@@ -104,7 +108,7 @@ const journey = [
 export function Journey() {
   return (
     <section className="mx-auto mt-24 max-w-7xl px-4" aria-labelledby="jr-h">
-      <div className="rounded-3xl bg-navy-950 px-6 py-14 text-white md:px-12">
+      <div className="rounded-3xl bg-gradient-to-br from-navy-950 via-navy-900 to-[#1b6b8f] px-6 py-14 text-white md:px-12">
         <h2 id="jr-h" className="max-w-xl text-3xl font-extrabold tracking-tight md:text-4xl">Expert Repairs. Without Leaving Your Home.</h2>
         <ol className="relative mt-12 grid gap-0 md:grid-cols-5 md:gap-6">
           <span aria-hidden="true" className="absolute left-[19px] top-2 h-[calc(100%-1rem)] w-px bg-white/20 md:left-0 md:right-0 md:top-[19px] md:h-px md:w-full" />
@@ -129,21 +133,21 @@ export function Trust() {
     { Icon: Radio, t: "Status you can follow", d: "Every stage is logged against your ticket and visible when you track." },
   ];
   return (
-    <section className="mx-auto max-w-7xl px-4 pt-24" aria-labelledby="trust-h">
+    <section className="mx-auto max-w-[1360px] px-4 pt-14 md:px-10" aria-labelledby="trust-h">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr]">
         <div>
-          <h2 id="trust-h" className="text-3xl font-extrabold tracking-tight text-navy-900 md:text-4xl">Your Device. Your Data. Your Peace of Mind.</h2>
+          <h2 id="trust-h" className="text-2xl font-bold tracking-tight text-ink md:text-[32px]">Your Device. Your Data. Your Peace of Mind.</h2>
           <p className="mt-4 leading-7 text-muted">
             Your phone holds your photos, messages and banking apps. We only access what a repair needs, we don’t ask for your passwords or PINs unless a diagnosis genuinely requires it, and we explain every step. Please back up your data before a repair; some repairs can’t be done without a reset.
           </p>
           <ul className="mt-6 space-y-3 text-sm">
-            <li className="flex gap-3"><Lock className="mt-0.5 h-5 w-5 shrink-0 text-navy-800" aria-hidden="true" /> Photos you upload are stored privately and only used for your repair.</li>
-            <li className="flex gap-3"><EyeOff className="mt-0.5 h-5 w-5 shrink-0 text-navy-800" aria-hidden="true" /> Tracking needs your ticket number plus your phone number or tracking key.</li>
+            <li className="flex gap-3"><Lock className="mt-0.5 h-5 w-5 shrink-0 text-ink" aria-hidden="true" /> Photos you upload are stored privately and only used for your repair.</li>
+            <li className="flex gap-3"><EyeOff className="mt-0.5 h-5 w-5 shrink-0 text-ink" aria-hidden="true" /> Tracking needs your ticket number plus your phone number or tracking key.</li>
           </ul>
         </div>
         <ul className="grid gap-4 sm:grid-cols-2">
           {items.map(({ Icon, t, d }) => (
-            <li key={t} className="rounded-xl border border-line bg-white p-5">
+            <li key={t} className="rounded-xl border border-line bg-surface p-5">
               <Icon className="h-6 w-6 text-blue-500" strokeWidth={1.5} aria-hidden="true" />
               <h3 className="mt-3 font-bold">{t}</h3><p className="mt-1 text-sm leading-6 text-muted">{d}</p>
             </li>
@@ -157,19 +161,19 @@ export function Trust() {
 export function Pricing({ services }: { services: RepairServiceItem[] }) {
   const priced = services.filter((s) => s.startingPricePaise != null || s.diagnosticFeePaise != null);
   return (
-    <section className="mx-auto max-w-7xl px-4 pt-24" aria-labelledby="price-h">
-      <h2 id="price-h" className="text-3xl font-extrabold tracking-tight text-navy-900 md:text-4xl">Pricing, without surprises.</h2>
+    <section className="mx-auto max-w-[1360px] px-4 pt-14 md:px-10" aria-labelledby="price-h">
+      <h2 id="price-h" className="text-2xl font-bold tracking-tight text-ink md:text-[32px]">Pricing, without surprises.</h2>
       <p className="mt-3 max-w-2xl text-muted">Figures here are <strong>estimates or starting prices</strong>. The price you pay is the one in your quotation, which you approve first.</p>
       {priced.length === 0 ? (
-        <div className="mt-8 rounded-xl border border-dashed border-line bg-white p-8 text-sm leading-6">
+        <div className="mt-8 rounded-xl border border-dashed border-line bg-surface p-8 text-sm leading-6">
           <p className="font-bold">Prices are quoted per phone and fault.</p>
           <p className="mt-1 text-muted">We diagnose first, then send a quotation showing parts, labour and tax. You decide whether to go ahead.</p>
         </div>
       ) : (
-        <div className="mt-8 overflow-x-auto rounded-xl border border-line bg-white">
+        <div className="mt-8 overflow-x-auto rounded-xl border border-line bg-surface">
           <table className="w-full min-w-[560px] text-left text-sm">
             <caption className="sr-only">Estimated repair prices</caption>
-            <thead className="bg-navy-50 text-xs uppercase tracking-wide text-navy-900"><tr><th scope="col" className="px-4 py-3">Service</th><th scope="col" className="px-4 py-3">Starting price (estimate)</th><th scope="col" className="px-4 py-3">Diagnostic fee</th><th scope="col" className="px-4 py-3">Time</th></tr></thead>
+            <thead className="bg-surface-2 text-xs uppercase tracking-wide text-ink"><tr><th scope="col" className="px-4 py-3">Service</th><th scope="col" className="px-4 py-3">Starting price (estimate)</th><th scope="col" className="px-4 py-3">Diagnostic fee</th><th scope="col" className="px-4 py-3">Time</th></tr></thead>
             <tbody className="divide-y divide-line">
               {priced.map((s) => (
                 <tr key={s.id}><th scope="row" className="px-4 py-3 font-semibold">{s.name}</th>
@@ -190,14 +194,14 @@ export type RepairReview = { id: string; rating: number; text: string; author: s
 /** Renders ONLY real, approved reviews. With none, shows an honest empty state — never invented testimonials. */
 export function Reviews({ reviews }: { reviews: RepairReview[] }) {
   return (
-    <section className="mx-auto max-w-7xl px-4 pt-24" aria-labelledby="rev-h">
-      <h2 id="rev-h" className="text-3xl font-extrabold tracking-tight text-navy-900 md:text-4xl">What customers say</h2>
+    <section className="mx-auto max-w-[1360px] px-4 pt-14 md:px-10" aria-labelledby="rev-h">
+      <h2 id="rev-h" className="text-2xl font-bold tracking-tight text-ink md:text-[32px]">What customers say</h2>
       {reviews.length === 0 ? (
-        <p className="mt-6 rounded-xl border border-dashed border-line bg-white p-8 text-sm text-muted">Customer reviews will appear here after completed repairs. We only publish genuine feedback.</p>
+        <p className="mt-6 rounded-xl border border-dashed border-line bg-surface p-8 text-sm text-muted">Customer reviews will appear here after completed repairs. We only publish genuine feedback.</p>
       ) : (
         <ul className="mt-8 grid gap-4 md:grid-cols-3">
           {reviews.map((r) => (
-            <li key={r.id} className="rounded-xl border border-line bg-white p-6">
+            <li key={r.id} className="rounded-xl border border-line bg-surface p-6">
               <p className="flex gap-0.5 text-gold-500" role="img" aria-label={`${r.rating} out of 5 stars`}>{Array.from({ length: 5 }, (_, i) => <Star key={i} className="h-4 w-4" fill={i < r.rating ? "currentColor" : "none"} aria-hidden="true" />)}</p>
               <blockquote className="mt-3 text-sm leading-6">“{r.text}”</blockquote>
               <p className="mt-4 text-xs text-muted">{r.author} · {r.repair} · {r.brand}</p>
@@ -225,7 +229,7 @@ export function FinalCta() {
 
 export function StickyBookCta() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 p-3 backdrop-blur md:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-canvas/90 p-3 backdrop-blur md:hidden">
       <Link href="#book" className="flex h-12 items-center justify-center gap-2 rounded-lg bg-navy-900 font-bold text-white">Book a Repair <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
     </div>
   );

@@ -21,7 +21,7 @@ export default function FaqPage() {
   return (
     <PageShell title="Frequently asked questions">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, "\\u003c") }} />
-      <div className="divide-y divide-line rounded-xl border border-line bg-white">
+      <div className="divide-y divide-line rounded-xl border border-line bg-surface">
         {faqs.map((f) => (
           <details key={f.q} className="group p-5">
             <summary className="cursor-pointer list-none font-bold [&::-webkit-details-marker]:hidden">{f.q}</summary>

@@ -24,3 +24,13 @@ Replace sample catalogue with real stock · verify phone/WhatsApp in `src/lib/si
 
 ## Deploy (Netlify)
 `netlify.toml` sets the build command. Steps: push to GitHub → Netlify "Import project" → set env vars from `.env.example` → deploy → add custom domain (HTTPS is automatic) → run smoke tests (home, /shop, /finder, a product page, /sitemap.xml). Next.js 16 support on Netlify's adapter has not been verified by a deploy yet. See [Netlify's Next.js docs](https://docs.netlify.com/integrations/frameworks/next-js). Database setup, Razorpay/Shiprocket/Resend configuration are not yet implemented.
+
+## Repair landing: where to change things
+| What | Where |
+|---|---|
+| Colours | `src/app/globals.css` → `:root` tokens (`--navy-*`, `--blue-*`, `--gold-*`) |
+| Fonts | `src/app/layout.tsx` (DM Sans headings, Figtree body on repair pages) |
+| Copy, promo strip, speed claim, rating, reviews, press, backers, FAQs | `src/lib/repair/content.ts` (claim fields are empty = hidden) |
+| Photos | drop WebP files in `public/images/repair/` and set the paths in `content.ts` (hero, spotlight, reviewer avatars); until then original illustrations from `src/components/repair/art.tsx` are shown |
+| Phone, WhatsApp, service areas, warranty months | `src/lib/site.ts` |
+| Sections / layout | `src/components/repair/landing.tsx`, header/footer/tab bar in `chrome.tsx`, booking steps in `book-ui.tsx` |

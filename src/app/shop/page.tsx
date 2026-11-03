@@ -65,35 +65,35 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
       <nav aria-label="Breadcrumb" className="text-sm text-muted">
         <Link href="/" className="hover:underline">Home</Link> / <span aria-current="page" className="text-ink">Shop</span>
       </nav>
-      <h1 className="mt-3 text-3xl font-extrabold text-navy-900">
+      <h1 className="mt-3 text-3xl font-extrabold text-ink">
         {query.q ? `Results for “${query.q}”` : device ? `${device[0].toUpperCase()}${device.slice(1)} parts` : "All products"}
       </h1>
       <p className="mt-1 text-sm text-muted" aria-live="polite">{total} {total === 1 ? "product" : "products"}</p>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[250px_1fr]">
         <aside aria-label="Filters">
-          <form action="/shop" className="space-y-5 rounded-xl border border-line bg-white p-5">
+          <form action="/shop" className="space-y-5 rounded-xl border border-line bg-surface p-5">
             <div>
               <label htmlFor="f-q" className="text-sm font-bold">Search</label>
               <input id="f-q" name="q" defaultValue={query.q} className="mt-1.5 h-10 w-full rounded-lg border border-line px-3 text-sm" />
             </div>
             <div>
               <label htmlFor="f-device" className="text-sm font-bold">Device</label>
-              <select id="f-device" name="device" defaultValue={device ?? ""} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-white px-2 text-sm">
+              <select id="f-device" name="device" defaultValue={device ?? ""} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-surface px-2 text-sm">
                 <option value="">All devices</option>
                 {DEVICES.map((d) => <option key={d} value={d}>{d[0].toUpperCase() + d.slice(1)}</option>)}
               </select>
             </div>
             <div>
               <label htmlFor="f-cat" className="text-sm font-bold">Category</label>
-              <select id="f-cat" name="category" defaultValue={query.category ?? ""} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-white px-2 text-sm">
+              <select id="f-cat" name="category" defaultValue={query.category ?? ""} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-surface px-2 text-sm">
                 <option value="">All categories</option>
                 {visibleCats.map((c) => <option key={c.id} value={c.slug}>{c.name}</option>)}
               </select>
             </div>
             <div>
               <label htmlFor="f-brand" className="text-sm font-bold">Brand</label>
-              <select id="f-brand" name="brand" defaultValue={query.brand ?? ""} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-white px-2 text-sm">
+              <select id="f-brand" name="brand" defaultValue={query.brand ?? ""} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-surface px-2 text-sm">
                 <option value="">All brands</option>
                 {brands.map((b) => <option key={b.id} value={b.slug}>{b.name}</option>)}
               </select>
@@ -110,7 +110,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
             </label>
             <div>
               <label htmlFor="f-sort" className="text-sm font-bold">Sort by</label>
-              <select id="f-sort" name="sort" defaultValue={sort} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-white px-2 text-sm">
+              <select id="f-sort" name="sort" defaultValue={sort} className="mt-1.5 h-10 w-full rounded-lg border border-line bg-surface px-2 text-sm">
                 <option value="relevance">Relevance</option>
                 <option value="price_asc">Price: low to high</option>
                 <option value="price_desc">Price: high to low</option>
@@ -119,19 +119,19 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
             </div>
             <div className="flex gap-2">
               <button className="h-10 flex-1 cursor-pointer rounded-lg bg-navy-900 text-sm font-semibold text-white hover:bg-navy-800">Apply</button>
-              <Link href="/shop" className="inline-flex h-10 items-center rounded-lg border border-line px-3 text-sm font-semibold hover:bg-navy-50">Reset</Link>
+              <Link href="/shop" className="inline-flex h-10 items-center rounded-lg border border-line px-3 text-sm font-semibold hover:bg-surface-2">Reset</Link>
             </div>
           </form>
         </aside>
 
         <section aria-label="Products">
           {items.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-line bg-white p-12 text-center">
+            <div className="rounded-xl border border-dashed border-line bg-surface p-12 text-center">
               <h2 className="text-lg font-bold">No products match your filters</h2>
               <p className="mx-auto mt-2 max-w-md text-sm text-muted">Try fewer filters, or tell us the part you need and we will try to source it.</p>
               <div className="mt-5 flex justify-center gap-3 text-sm font-semibold">
-                <Link href="/shop" className="text-navy-700 underline">Clear filters</Link>
-                <Link href="/finder" className="text-navy-700 underline">Use the Smart Finder</Link>
+                <Link href="/shop" className="text-blue-400 underline">Clear filters</Link>
+                <Link href="/finder" className="text-blue-400 underline">Use the Smart Finder</Link>
               </div>
             </div>
           ) : (
@@ -142,9 +142,9 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
 
           {pages > 1 && (
             <nav aria-label="Pagination" className="mt-8 flex items-center justify-center gap-2 text-sm font-semibold">
-              {page > 1 && <Link href={href({ page: page - 1 })} rel="prev" className="rounded-lg border border-line bg-white px-4 py-2 hover:bg-navy-50">Previous</Link>}
+              {page > 1 && <Link href={href({ page: page - 1 })} rel="prev" className="rounded-lg border border-line bg-surface px-4 py-2 hover:bg-surface-2">Previous</Link>}
               <span className="px-3 text-muted">Page {page} of {pages}</span>
-              {page < pages && <Link href={href({ page: page + 1 })} rel="next" className="rounded-lg border border-line bg-white px-4 py-2 hover:bg-navy-50">Next</Link>}
+              {page < pages && <Link href={href({ page: page + 1 })} rel="next" className="rounded-lg border border-line bg-surface px-4 py-2 hover:bg-surface-2">Next</Link>}
             </nav>
           )}
         </section>

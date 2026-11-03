@@ -23,8 +23,9 @@ const MAP: [RegExp, LucideIcon][] = [
 export function ProductVisual({ categorySlug, label, className }: { categorySlug: string; label: string; className?: string }) {
   const Icon = MAP.find(([re]) => re.test(categorySlug))?.[1] ?? (categorySlug ? Package : Zap);
   return (
-    <div role="img" aria-label={`${label} (illustration — product photo coming soon)`} className={cn("flex items-center justify-center bg-gradient-to-br from-navy-50 to-white", className)}>
-      <Icon className="h-1/3 w-1/3 text-navy-800/70" strokeWidth={1.25} aria-hidden="true" />
+    <div role="img" aria-label={`${label} (illustration — product photo coming soon)`} className={cn("relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0b1a3d] to-[#05070d]", className)}>
+      <svg viewBox="0 0 120 120" aria-hidden="true" className="absolute h-3/4 w-3/4 opacity-[0.07]"><path d="M60 5 104 21v37c0 26-19 46-44 56C35 104 16 84 16 58V21Z" fill="#c9d1de" /></svg>
+      <Icon className="relative h-1/3 w-1/3 text-blue-400/80" strokeWidth={1.25} aria-hidden="true" />
     </div>
   );
 }

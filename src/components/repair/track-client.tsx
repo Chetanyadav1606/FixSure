@@ -14,7 +14,7 @@ const LABEL: Record<string, string> = {
 const FLOW = ["requested", "confirmed", "device_received", "diagnosing", "quote_pending", "approved", "repairing", "quality_check", "ready", "completed"];
 const fmt = (iso: string) => new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit", timeZone: "Asia/Kolkata" }).format(new Date(iso));
 const money = (n: number) => formatINR(rupeesToPaise(n));
-const input = "h-12 w-full rounded-lg border border-line bg-white px-3 text-base outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
+const input = "h-12 w-full rounded-lg border border-line bg-surface px-3 text-base outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
 
 function Timeline({ repair }: { repair: TrackedRepair }) {
   const done = new Map(repair.history.map((h) => [h.status, h]));
@@ -36,7 +36,7 @@ function Timeline({ repair }: { repair: TrackedRepair }) {
       })}
       {upcoming.map((s) => (
         <li key={s} className="relative flex gap-4 pb-6 text-muted">
-          <span className="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-white"><Circle className="h-3 w-3" aria-hidden="true" /></span>
+          <span className="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-surface"><Circle className="h-3 w-3" aria-hidden="true" /></span>
           <p className="pt-1 text-sm">{LABEL[s]} <span className="text-xs">(upcoming)</span></p>
         </li>
       ))}
@@ -54,7 +54,7 @@ export function TrackClient({ initialTicket, configured }: { initialTicket?: str
   return (
     <div>
       {!configured && <p className="mb-5 rounded-lg border border-gold-400/50 bg-gold-100 p-3 text-sm" role="note">Online tracking isn’t switched on yet. Contact us with your ticket number for an update.</p>}
-      <form action={track} className="grid gap-4 rounded-2xl border border-line bg-white p-5 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+      <form action={track} className="grid gap-4 rounded-2xl border border-line bg-surface p-5 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
         <div><label htmlFor="t-ticket" className="mb-1.5 block text-sm font-semibold">Ticket number</label><input id="t-ticket" name="ticket" required defaultValue={initialTicket} placeholder="FSR-1001" autoCapitalize="characters" className={input} /></div>
         <div><label htmlFor="t-secret" className="mb-1.5 block text-sm font-semibold">Phone number or tracking key</label><input id="t-secret" name="secret" required autoComplete="tel" className={input} /></div>
         <button disabled={tracking || !configured} className="inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-lg bg-navy-900 px-6 font-semibold text-white hover:bg-navy-800 disabled:opacity-50">{tracking && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />} Track</button>
@@ -67,13 +67,13 @@ export function TrackClient({ initialTicket, configured }: { initialTicket?: str
       </div>
 
       {repair && (
-        <section className="mt-8 rounded-2xl border border-line bg-white p-6" aria-labelledby="tr-h">
+        <section className="mt-8 rounded-2xl border border-line bg-surface p-6" aria-labelledby="tr-h">
           <p className="text-xs font-bold uppercase tracking-wider text-gold-600">{repair.ticket_number}</p>
-          <h2 id="tr-h" className="text-2xl font-extrabold text-navy-900">{repair.device}</h2>
+          <h2 id="tr-h" className="text-2xl font-extrabold text-ink">{repair.device}</h2>
           <p className="text-sm text-muted">{repair.issue}{repair.technician_first_name && <> · Technician: {repair.technician_first_name}</>}{repair.appointment && <> · Appointment: {fmt(repair.appointment)}</>}</p>
 
           {q && (
-            <div className="mt-6 rounded-xl border border-navy-900/20 bg-navy-50 p-5">
+            <div className="mt-6 rounded-xl border border-line bg-surface-2 p-5">
               <h3 className="font-extrabold">Quotation</h3>
               <dl className="mt-3 grid grid-cols-[1fr_auto] gap-y-1.5 text-sm">
                 <dt>Parts</dt><dd>{money(q.parts_total)}</dd><dt>Labour</dt><dd>{money(q.labour_total)}</dd><dt>Tax</dt><dd>{money(q.tax_total)}</dd>
@@ -85,7 +85,7 @@ export function TrackClient({ initialTicket, configured }: { initialTicket?: str
                 <form action={decide} className="mt-4 flex flex-wrap gap-3">
                   <input type="hidden" name="ticket" value={repair.ticket_number} /><input type="hidden" name="secret" value={(view as { secret: string }).secret} /><input type="hidden" name="quoteId" value={q.id} />
                   <button name="decision" value="approve" disabled={deciding} className="h-12 cursor-pointer rounded-lg bg-navy-900 px-6 font-semibold text-white hover:bg-navy-800 disabled:opacity-50">Approve quotation</button>
-                  <button name="decision" value="decline" disabled={deciding} className="h-12 cursor-pointer rounded-lg border border-navy-900/30 bg-white px-6 font-semibold text-navy-900 hover:bg-navy-50 disabled:opacity-50">Decline</button>
+                  <button name="decision" value="decline" disabled={deciding} className="h-12 cursor-pointer rounded-lg border border-line bg-surface px-6 font-semibold text-ink hover:bg-surface-2 disabled:opacity-50">Decline</button>
                 </form>
               ) : <p className="mt-3 text-sm font-semibold">Status: {q.status}</p>}
             </div>

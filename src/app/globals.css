@@ -2,27 +2,29 @@
 
 /* FixSure design tokens — see BRAND_GUIDELINES.md */
 :root {
-  --navy-950: #061a47;
-  --navy-900: #0b2a6f;
+  color-scheme: dark;
+  --surface-2: #101a2e;
+  --navy-950: #05070d;
+  --navy-900: #0b1a3d;
   --navy-800: #123585;
-  --navy-700: #1b45a3;
-  --navy-100: #e4eaf7;
-  --navy-50: #f3f6fc;
-  --blue-500: #1677e8;
-  --blue-400: #4f9bf5;
-  --gold-600: #a87820;
-  --gold-500: #c8962e;
-  --gold-400: #e0b050;
-  --gold-100: #faf0d6;
-  --ink: #101828;
-  --muted: #475467;
-  --line: #e2e6ee;
-  --surface: #ffffff;
-  --canvas: #f7f8fb;
-  --success: #067647;
-  --warning: #a15c07;
-  --danger: #b42318;
-  --focus: #1b45a3;
+  --navy-700: #1e6bff;
+  --navy-100: #14213a;
+  --navy-50: #101a2e;
+  --blue-500: #1e6bff;
+  --blue-400: #00a3ff;
+  --gold-600: #ff9f1c;
+  --gold-500: #ffb01f;
+  --gold-400: #ffc21a;
+  --gold-100: #ffe7a3;
+  --ink: #ffffff;
+  --muted: #c9d1de;
+  --line: #22304a;
+  --surface: #0b1220;
+  --canvas: #05070d;
+  --success: #3ddc84;
+  --warning: #ffb547;
+  --danger: #ff6b6b;
+  --focus: #ffc21a;
 }
 
 @theme inline {
@@ -43,10 +45,12 @@
   --color-line: var(--line);
   --color-surface: var(--surface);
   --color-canvas: var(--canvas);
+  --color-surface-2: var(--surface-2);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
-  --font-sans: var(--font-manrope), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-figtree), var(--font-manrope), "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-exo), var(--font-dm), sans-serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -73,7 +77,7 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #eceff5 25%, #f6f8fb 37%, #eceff5 63%);
+  background: linear-gradient(90deg, #0b1220 25%, #14213a 37%, #0b1220 63%);
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;
 }
@@ -86,3 +90,30 @@ body {
   background-size: 44px 44px;
   mask-image: radial-gradient(70% 70% at 60% 40%, #000, transparent);
 }
+
+/* Repair pages: DM Sans headings + Figtree body (typographic pairing of the reference, re-coloured to FixSure) */
+.repair-ui { font-family: var(--font-figtree), var(--font-sans); }
+.repair-ui h1, .repair-ui h2, .repair-ui h3, .repair-ui h4 { font-family: var(--font-dm), var(--font-sans); }
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 22s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+/* ---- FixSure Professor dark theme ---- */
+h1, h2 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; }
+.repair-ui h1, .repair-ui h2 { font-family: var(--font-display); }
+::placeholder { color: #8b96aa; opacity: 1; }
+.text-gradient { background: linear-gradient(90deg, #1e6bff, #00a3ff 45%, #ffc21a 70%, #ff9f1c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.btn-gold { background: linear-gradient(135deg, #ffc21a, #ff9f1c); color: #05070d; box-shadow: 0 0 0 0 rgba(255,194,26,.5); animation: glow 2.8s ease-in-out infinite; }
+.btn-blue { border: 1.5px solid #1e6bff; color: #fff; box-shadow: 0 0 18px rgba(30,107,255,.35), inset 0 0 12px rgba(30,107,255,.15); }
+.btn-blue:hover { background: rgba(30,107,255,.15); }
+@keyframes glow { 0%,100% { box-shadow: 0 0 0 0 rgba(255,194,26,.0), 0 8px 24px rgba(255,159,28,.25); } 50% { box-shadow: 0 0 0 6px rgba(255,194,26,.12), 0 8px 32px rgba(255,159,28,.45); } }
+.glass { background: rgba(16,26,46,.6); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(201,209,222,.12); }
+.lift { transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+.lift:hover { transform: translateY(-4px) rotate(-.4deg); border-color: rgba(255,194,26,.6); box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 24px rgba(30,107,255,.18); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .7s ease both; }
+@media (prefers-reduced-motion: reduce) { .btn-gold { animation: none; } .lift:hover { transform: none; } .rise { animation: none; } }

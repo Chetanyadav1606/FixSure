@@ -44,8 +44,8 @@ export default async function Home() {
             </div>
           </div>
 
-          <form action="/finder" className="rounded-2xl bg-white p-6 text-ink shadow-2xl" aria-labelledby="finder-heading">
-            <h2 id="finder-heading" className="flex items-center gap-2 text-lg font-extrabold text-navy-900">
+          <form action="/finder" className="rounded-2xl bg-surface p-6 text-ink shadow-2xl" aria-labelledby="finder-heading">
+            <h2 id="finder-heading" className="flex items-center gap-2 text-lg font-extrabold text-ink">
               <Search className="h-5 w-5 text-gold-600" aria-hidden="true" /> Smart Compatibility Finder
             </h2>
             <p className="mt-1 text-sm text-muted">Enter your device model or a part number to see the parts we have on record for it.</p>
@@ -58,32 +58,32 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-16" aria-labelledby="cat-h">
-        <h2 id="cat-h" className="text-2xl font-extrabold text-navy-900">Shop by category</h2>
+        <h2 id="cat-h" className="text-2xl font-extrabold text-ink">Shop by category</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {deviceTiles.map(({ label, href, Icon, blurb }) => (
-            <Link key={href} href={href} className="group rounded-xl border border-line bg-white p-5 transition hover:-translate-y-0.5 hover:border-navy-700/40 hover:shadow-lg">
-              <Icon className="h-8 w-8 text-navy-900" strokeWidth={1.5} aria-hidden="true" />
+            <Link key={href} href={href} className="group rounded-xl border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:border-navy-700/40 hover:shadow-lg">
+              <Icon className="h-8 w-8 text-ink" strokeWidth={1.5} aria-hidden="true" />
               <h3 className="mt-4 font-bold">{label}</h3>
               <p className="mt-1 text-sm leading-6 text-muted">{blurb}</p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-navy-700">Browse <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" aria-hidden="true" /></span>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-400">Browse <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" aria-hidden="true" /></span>
             </Link>
           ))}
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-14" aria-labelledby="brand-h">
-        <h2 id="brand-h" className="text-2xl font-extrabold text-navy-900">Shop by laptop brand</h2>
+        <h2 id="brand-h" className="text-2xl font-extrabold text-ink">Shop by laptop brand</h2>
         <ul className="mt-6 flex flex-wrap gap-3">
           {laptopBrands.map((b) => (
-            <li key={b.id}><Link href={`/shop?device=laptop&brand=${b.slug}`} className="inline-block rounded-lg border border-line bg-white px-5 py-3 font-bold hover:border-navy-700 hover:text-navy-900">{b.name}</Link></li>
+            <li key={b.id}><Link href={`/shop?device=laptop&brand=${b.slug}`} className="inline-block rounded-lg border border-line bg-surface px-5 py-3 font-bold hover:border-navy-700 hover:text-ink">{b.name}</Link></li>
           ))}
         </ul>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-14" aria-labelledby="feat-h">
         <div className="flex items-end justify-between">
-          <h2 id="feat-h" className="text-2xl font-extrabold text-navy-900">Featured products</h2>
-          <Link href="/shop" className="text-sm font-semibold text-navy-700 hover:underline">View all</Link>
+          <h2 id="feat-h" className="text-2xl font-extrabold text-ink">Featured products</h2>
+          <Link href="/shop" className="text-sm font-semibold text-blue-400 hover:underline">View all</Link>
         </div>
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((p) => <ProductCard key={p.id} product={p} category={catById.get(p.categoryId)} brand={brandById.get(p.brandId)} />)}
@@ -91,9 +91,9 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto mt-16 max-w-7xl px-4" aria-labelledby="rep-h">
-        <div className="grid gap-8 rounded-2xl bg-navy-50 p-8 md:grid-cols-2 md:p-12">
+        <div className="grid gap-8 rounded-2xl bg-surface-2 p-8 md:grid-cols-2 md:p-12">
           <div>
-            <h2 id="rep-h" className="text-2xl font-extrabold text-navy-900">Repair services</h2>
+            <h2 id="rep-h" className="text-2xl font-extrabold text-ink">Repair services</h2>
             <p className="mt-3 max-w-md leading-7 text-muted">
               Laptop, desktop and mobile repairs. Diagnosis first, a clear quote before any work begins, and a ticket you can track.
             </p>
@@ -102,19 +102,19 @@ export default async function Home() {
               <ButtonLink href="/contact" variant="outline">Ask a technician</ButtonLink>
             </div>
           </div>
-          <ul className="grid gap-3 text-sm font-semibold text-navy-900 sm:grid-cols-2">
+          <ul className="grid gap-3 text-sm font-semibold text-ink sm:grid-cols-2">
             {["Screen replacement", "Battery replacement", "Charging issues", "Keyboard replacement", "SSD & RAM upgrades", "Software & malware"].map((s) => (
-              <li key={s} className="flex items-center gap-2 rounded-lg bg-white px-4 py-3"><Wrench className="h-4 w-4 text-gold-600" aria-hidden="true" />{s}</li>
+              <li key={s} className="flex items-center gap-2 rounded-lg bg-surface px-4 py-3"><Wrench className="h-4 w-4 text-gold-600" aria-hidden="true" />{s}</li>
             ))}
           </ul>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-16" aria-labelledby="how-h">
-        <h2 id="how-h" className="text-2xl font-extrabold text-navy-900">How FixSure works</h2>
+        <h2 id="how-h" className="text-2xl font-extrabold text-ink">How FixSure works</h2>
         <ol className="mt-6 grid gap-5 md:grid-cols-3">
           {steps.map((s, i) => (
-            <li key={s.title} className="rounded-xl border border-line bg-white p-6">
+            <li key={s.title} className="rounded-xl border border-line bg-surface p-6">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-900 text-sm font-bold text-white">{i + 1}</span>
               <h3 className="mt-4 font-bold">{s.title}</h3>
               <p className="mt-1 text-sm leading-6 text-muted">{s.body}</p>
@@ -135,8 +135,8 @@ export default async function Home() {
 
       <section className="mx-auto max-w-7xl px-4 pt-14" aria-label="Service area">
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-muted">
-          <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-navy-800" aria-hidden="true" /> {site.serviceAreas.join(" · ")}</span>
-          <span className="inline-flex items-center gap-2"><Truck className="h-4 w-4 text-navy-800" aria-hidden="true" /> Delivery and doorstep options are shown only where available</span>
+          <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-ink" aria-hidden="true" /> {site.serviceAreas.join(" · ")}</span>
+          <span className="inline-flex items-center gap-2"><Truck className="h-4 w-4 text-ink" aria-hidden="true" /> Delivery and doorstep options are shown only where available</span>
         </div>
       </section>
     </>

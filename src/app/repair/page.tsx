@@ -1,52 +1,54 @@
 import type { Metadata } from "next";
-import { BookingWizard } from "@/components/repair/booking-wizard";
-import { FinalCta, Journey, Pricing, RepairHero, Reviews, ServiceGrid, StickyBookCta, Trust } from "@/components/repair/sections";
+import { Pillars, CuriousMinds, DeviceSection, FaqSection, InTheNews, Reveal, Testimonials, LandingHero, PromiseBanner, QuestionPanel, SpotlightRow, StepsCarousel, WarrantyBanner } from "@/components/repair/landing";
+import { Pricing, Trust } from "@/components/repair/sections";
 import { loadRepairCatalog } from "@/lib/repair/catalog";
 import { site } from "@/lib/site";
-import Link from "next/link";
+import { WingsDivider } from "@/components/ui/logo";
+import { repairContent } from "@/lib/repair/content";
 
 export const metadata: Metadata = {
-  title: "Mobile Repair at Your Doorstep",
+  title: { absolute: "FixSure Professor | Doorstep Mobile Repair in Mumbai" },
   description: "Professional mobile phone repairs in Mumbai, Navi Mumbai and Thane. Book a FixSure technician, get a clear quote before any work, and track your repair online.",
   alternates: { canonical: "/repair" },
+  openGraph: { title: "FixSure Professor | Doorstep Mobile Repair in Mumbai", description: "Quote before any repair. Book a FixSure technician in Mumbai, Navi Mumbai and Thane.", url: "/repair", type: "website", },
+  twitter: { card: "summary_large_image", title: "FixSure Professor | Doorstep Mobile Repair in Mumbai" },
 };
 
 type SP = Record<string, string | string[] | undefined>;
 
 export default async function RepairPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
-  const service = Array.isArray(sp.service) ? sp.service[0] : sp.service;
+  const device = Array.isArray(sp.device) ? sp.device[0] : sp.device;
   const catalog = await loadRepairCatalog();
 
   const jsonLd = {
-    "@context": "https://schema.org", "@type": "Service", name: "Mobile phone repair", provider: { "@type": "Organization", name: "FixSure", url: site.url },
+    "@context": "https://schema.org", "@type": "LocalBusiness", name: "FixSure", alternateName: "FixSure Professor", slogan: site.motto,
+    url: `${site.url}/repair`, telephone: `+91${site.phone}`, image: `${site.url}/opengraph-image`,
+    address: { "@type": "PostalAddress", addressLocality: "Mumbai", addressRegion: "Maharashtra", addressCountry: "IN" },
     areaServed: site.serviceAreas.map((a) => ({ "@type": "City", name: a })),
   };
 
   return (
-    <>
+    <div className="pb-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <RepairHero />
-      <ServiceGrid services={catalog.services} configured={catalog.configured} />
-
-      <section id="book" className="mx-auto max-w-4xl scroll-mt-44 md:scroll-mt-32 px-4 pt-24" aria-labelledby="book-h">
-        <h2 id="book-h" className="text-3xl font-extrabold tracking-tight text-navy-900 md:text-4xl">Book your repair</h2>
-        <p className="mt-2 text-muted">Takes a few minutes. Already booked? <Link href="/repair/track" className="font-semibold text-navy-700 underline">Track your repair</Link>.</p>
-        <div className="mt-6">
-          <BookingWizard
-            initialServiceSlug={service}
-            data={{ configured: catalog.configured, brands: catalog.brands, services: catalog.services, slots: catalog.slots, centres: catalog.centres, whatsapp: site.whatsapp }}
-          />
-        </div>
-      </section>
-
-      <Journey />
-      <Trust />
-      <Pricing services={catalog.services} />
-      <Reviews reviews={[]} />
-      <FinalCta />
-      <div className="h-20 md:hidden" aria-hidden="true" />
-      <StickyBookCta />
-    </>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: repairContent.faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) }) }} />
+      <LandingHero />
+      <Pillars />
+      <DeviceSection brands={catalog.brands} services={catalog.services} initialTab={device} />
+      <WingsDivider />
+      <Reveal><PromiseBanner /></Reveal>
+      <Reveal><SpotlightRow /></Reveal>
+      <Reveal><Testimonials /></Reveal>
+      <Reveal><StepsCarousel /></Reveal>
+      <WingsDivider label="REPAIR WARRANTY" />
+      <Reveal><WarrantyBanner /></Reveal>
+      <Reveal><CuriousMinds /></Reveal>
+      <Reveal><QuestionPanel /></Reveal>
+      <InTheNews />
+      <Reveal><Trust /></Reveal>
+      <Reveal><Pricing services={catalog.services} /></Reveal>
+      <WingsDivider />
+      <FaqSection />
+    </div>
   );
 }

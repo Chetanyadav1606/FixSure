@@ -37,7 +37,7 @@ export default async function FinderPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="text-3xl font-extrabold text-navy-900">Smart Compatibility Finder</h1>
+      <h1 className="text-3xl font-extrabold text-ink">Smart Compatibility Finder</h1>
       <p className="mt-2 max-w-2xl text-muted">
         Search by device model, or by an exact SKU / OEM part number. We only list compatibility we have recorded. If a device is not listed it is <strong>not verified</strong>, never assumed compatible.
       </p>
@@ -45,7 +45,7 @@ export default async function FinderPage({ searchParams }: { searchParams: Promi
       <form action="/finder" role="search" className="mt-6 flex flex-col gap-3 sm:flex-row">
         <div className="flex-1">
           <label htmlFor="fq" className="sr-only">Device model or part number</label>
-          <input id="fq" name="q" list="model-suggestions" defaultValue={q} required minLength={2} autoComplete="off" placeholder="Device model or part number, e.g. HP Pavilion 15" className="h-12 w-full rounded-lg border border-line bg-white px-4 text-sm outline-none focus:border-navy-700" />
+          <input id="fq" name="q" list="model-suggestions" defaultValue={q} required minLength={2} autoComplete="off" placeholder="Device model or part number, e.g. HP Pavilion 15" className="h-12 w-full rounded-lg border border-line bg-surface px-4 text-sm outline-none focus:border-navy-700" />
           <datalist id="model-suggestions">{models.map((m) => <option key={m.id} value={modelLabel(m)} />)}</datalist>
         </div>
         <button className="h-12 cursor-pointer rounded-lg bg-navy-900 px-6 text-sm font-semibold text-white hover:bg-navy-800">Find parts</button>
@@ -56,7 +56,7 @@ export default async function FinderPage({ searchParams }: { searchParams: Promi
           <h2 id="pick-h" className="font-bold">Which device is yours?</h2>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {matches.map((m) => (
-              <li key={m.id}><Link href={`/finder?q=${encodeURIComponent(q)}&model=${m.id}`} className="block rounded-lg border border-line bg-white px-4 py-3 text-sm font-semibold hover:border-navy-700">{modelLabel(m)} <span className="font-normal text-muted">· {m.deviceType}</span></Link></li>
+              <li key={m.id}><Link href={`/finder?q=${encodeURIComponent(q)}&model=${m.id}`} className="block rounded-lg border border-line bg-surface px-4 py-3 text-sm font-semibold hover:border-navy-700">{modelLabel(m)} <span className="font-normal text-muted">· {m.deviceType}</span></Link></li>
             ))}
           </ul>
         </section>
@@ -64,9 +64,9 @@ export default async function FinderPage({ searchParams }: { searchParams: Promi
 
       {selected && (
         <section className="mt-8" aria-labelledby="res-h">
-          <h2 id="res-h" className="text-xl font-extrabold text-navy-900">Parts for {modelLabel(selected)}</h2>
+          <h2 id="res-h" className="text-xl font-extrabold text-ink">Parts for {modelLabel(selected)}</h2>
           {partResults.length === 0 ? (
-            <p className="mt-3 rounded-xl border border-dashed border-line bg-white p-6 text-sm text-muted">No parts recorded for this device yet. That does not mean none exist — send us the details below and we will check.</p>
+            <p className="mt-3 rounded-xl border border-dashed border-line bg-surface p-6 text-sm text-muted">No parts recorded for this device yet. That does not mean none exist — send us the details below and we will check.</p>
           ) : (
             <ul className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {partResults.map(({ product, status, note }) => (
@@ -82,17 +82,17 @@ export default async function FinderPage({ searchParams }: { searchParams: Promi
 
       {partNumberHits.length > 0 && (
         <section className="mt-8" aria-labelledby="pn-h">
-          <h2 id="pn-h" className="text-xl font-extrabold text-navy-900">Exact part-number match</h2>
+          <h2 id="pn-h" className="text-xl font-extrabold text-ink">Exact part-number match</h2>
           <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {partNumberHits.map((p) => <ProductCard key={p.id} product={p} category={catById.get(p.categoryId)} brand={brandById.get(p.brandId)} />)}
           </div>
         </section>
       )}
 
-      {nothing && <p className="mt-8 rounded-xl border border-line bg-white p-6 text-sm" role="status">No device or part number matches “{q}”.</p>}
+      {nothing && <p className="mt-8 rounded-xl border border-line bg-surface p-6 text-sm" role="status">No device or part number matches “{q}”.</p>}
 
-      <section className="mt-12 rounded-2xl bg-navy-50 p-6 md:p-8" aria-labelledby="id-h">
-        <h2 id="id-h" className="flex items-center gap-2 text-lg font-extrabold text-navy-900"><Camera className="h-5 w-5" aria-hidden="true" /> Can’t identify your part?</h2>
+      <section className="mt-12 rounded-2xl bg-surface-2 p-6 md:p-8" aria-labelledby="id-h">
+        <h2 id="id-h" className="flex items-center gap-2 text-lg font-extrabold text-ink"><Camera className="h-5 w-5" aria-hidden="true" /> Can’t identify your part?</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">Send a clear photo of the part (and its label or serial sticker) with your device model. A technician will identify it for you.</p>
         <div className="mt-4"><ButtonLink href={whatsappLink("Hi FixSure, please help me identify a part. Device model: ")} rel="noopener"><MessageCircle className="h-4 w-4" aria-hidden="true" /> Send photo on WhatsApp</ButtonLink></div>
       </section>

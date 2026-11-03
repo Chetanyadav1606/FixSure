@@ -55,3 +55,9 @@ Node 24, npm 11. See `.env.example`. Nothing external is configured.
 2. Auth (Supabase SSR clients, `proxy.ts` optimistic guard, server-side role checks), bootstrap-admin script.
 3. Cart + server-side pricing endpoint + checkout + Razorpay (order, signature verify, idempotent webhook via `payment_webhook_events`).
 4. Repair booking/tracking (token-based guest tracking) → B2B → Admin → hardening → Playwright journeys → deployment docs.
+
+## Reference-style pass on /repair (2026-11-03)
+Added from the text structure of the reference: device tabs + brand chips, price-anchor cards, "Our promise", services spotlight, doorstep banner, warranty band, FAQ accordion, "Track Repair" and "Book now" in the header; colourful gradients throughout. Artwork is original vector DEMO illustration, labelled as such. Warranty months are `site.repairWarrantyMonths` (null = "terms on your quotation"). **Not verified:** visual match to the reference (only its text was readable; no screenshots supplied). Laptop/tablet tabs hand off to WhatsApp; only phones book online. Not built: city selector.
+
+## Reference recreation, rendered pass (2026-11-03)
+/repair rebuilt to the reference's structure (see REFERENCE_ANALYSIS.md addendum): repair header + service-area menu, hero, device tabs + price trio, spotlight, promise banner, steps carousel, warranty banner, flip cards, question panel, FAQ accordion, repair footer, mobile bottom tab bar. Booking moved to /repair/book (device) → /repair/book/issue → /repair/book/details (existing wizard, preset). Repair routes use their own chrome via ChromeGate; shop pages keep the storefront chrome. Verified: tsc, eslint, vitest, build, Playwright 12 tests (desktop + Pixel 7); visual spot-comparison against rendered reference screenshots. Not verified: reference booking Step 3, tablet widths, reference hover/animation timing; no real photography (illustrations); old unused components remain in sections.tsx.
