@@ -8,6 +8,8 @@
   --navy-700: #1b45a3;
   --navy-100: #e4eaf7;
   --navy-50: #f3f6fc;
+  --blue-500: #1677e8;
+  --blue-400: #4f9bf5;
   --gold-600: #a87820;
   --gold-500: #c8962e;
   --gold-400: #e0b050;
@@ -30,6 +32,8 @@
   --color-navy-700: var(--navy-700);
   --color-navy-100: var(--navy-100);
   --color-navy-50: var(--navy-50);
+  --color-blue-500: var(--blue-500);
+  --color-blue-400: var(--blue-400);
   --color-gold-600: var(--gold-600);
   --color-gold-500: var(--gold-500);
   --color-gold-400: var(--gold-400);
@@ -74,3 +78,11 @@ body {
   animation: shimmer 1.4s ease infinite;
 }
 @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.floaty { animation: floaty 6s ease-in-out infinite; }
+.grid-fade {
+  background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(70% 70% at 60% 40%, #000, transparent);
+}

@@ -1,0 +1,9 @@
+# Netlify auto-detects Next.js and applies its OpenNext-based runtime; no plugin entry is needed
+# unless you deliberately pin @netlify/plugin-nextjs. Next.js 16 support is NOT yet verified by a
+# real deploy — run the smoke tests in README after the first deploy.
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"

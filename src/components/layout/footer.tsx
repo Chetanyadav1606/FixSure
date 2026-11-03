@@ -18,6 +18,7 @@ const cols = [
     title: "Services",
     links: [
       { label: "Repair services", href: "/repair" },
+      { label: "Track a repair", href: "/repair/track" },
       { label: "Wholesale (B2B)", href: "/wholesale" },
       { label: "Buying guides", href: "/guides" },
     ],
